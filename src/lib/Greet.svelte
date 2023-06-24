@@ -1,11 +1,15 @@
 <script>
-	import { invoke } from '@tauri-apps/api/tauri';
+	import { PUBLIC_API_URL } from '$env/static/public';
 
 	let name = '';
 	let greetMsg = '';
 
 	async function greet() {
-		greetMsg = await invoke('greet', { name });
+		const res = await fetch(`${PUBLIC_API_URL}/api/v1`);
+		const data = await res.json();
+		console.log(data);
+
+		greetMsg = `Hello, ${name}! ${data}`;
 	}
 </script>
 

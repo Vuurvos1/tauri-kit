@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - main
+    # Exclude src/routes/api folder from triggering the workflow
+    paths-ignore:
+      - 'src/routes/api/**'
   workflow_dispatch:
 
 jobs:
@@ -15,10 +18,6 @@ jobs:
         # platform: [macos-latest, ubuntu-20.04, ubuntu-latest, windows-latest]
         platform: [windows-latest, ubuntu-latest]
     runs-on: ${{ matrix.platform }}
-
-    # Exclude src/routes/api folder from triggering the workflow
-    paths-ignore:
-      - 'src/routes/api/**'
 
     steps:
       - name: Checkout repository

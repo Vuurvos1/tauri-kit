@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - main
+    # Exclude src/routes/api folder from triggering the workflow
+    paths-ignore:
+      - 'src/routes/api/**'
   workflow_dispatch:
 
 jobs:
@@ -13,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         # platform: [macos-latest, ubuntu-20.04, ubuntu-latest, windows-latest]
-        platform: [ubuntu-20.04, windows-latest]
+        platform: [windows-latest, ubuntu-latest]
     runs-on: ${{ matrix.platform }}
 
     steps:
@@ -21,7 +24,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install dependencies (ubuntu only)
-        if: matrix.platform == 'ubuntu-20.04'
+        if: matrix.platform == 'ubuntu-20.04' || matrix.platform == 'ubuntu-latest'
         # You can remove libayatana-appindicator3-dev if you don't use the system tray feature.
         run: |
           sudo apt-get update
@@ -69,13 +72,13 @@ jobs:
 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PUBLIC_API_URL: ${{ secrets.PUBLIC_API_URL }}
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
+          PUBLIC_API_URL: ${{ secrets.PUBLIC_API_URL }}
           IS_DESKTOP: 'true'
         with:
-          tagName: ${{ github.ref_name }} # This only works if your workflow triggers on new tags.
-          releaseName: 'App Name v__VERSION__' # tauri-action replaces \_\_VERSION\_\_ with the app version.
+          tagName: 'v__VERSION__ ' # ${{ github.ref_name }} # This only works if your workflow triggers on new tags.
+          releaseName: 'v__VERSION__' # tauri-action replaces \_\_VERSION\_\_ with the app version.
           releaseBody: 'See the assets to download and install this version.'
           releaseDraft: true
           prerelease: false

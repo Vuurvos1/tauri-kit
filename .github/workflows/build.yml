@@ -16,6 +16,10 @@ jobs:
         platform: [windows-latest, ubuntu-latest]
     runs-on: ${{ matrix.platform }}
 
+    # Exclude src/routes/api folder from triggering the workflow
+    paths-ignore:
+      - 'src/routes/api/**'
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -74,7 +78,7 @@ jobs:
           PUBLIC_API_URL: ${{ secrets.PUBLIC_API_URL }}
           IS_DESKTOP: 'true'
         with:
-          tagName: ${{ github.ref_name }} # This only works if your workflow triggers on new tags.
+          tagName: 'v__VERSION__ ' # ${{ github.ref_name }} # This only works if your workflow triggers on new tags.
           releaseName: 'v__VERSION__' # tauri-action replaces \_\_VERSION\_\_ with the app version.
           releaseBody: 'See the assets to download and install this version.'
           releaseDraft: true

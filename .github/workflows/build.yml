@@ -6,6 +6,7 @@ on:
     # Exclude src/routes/api folder from triggering the workflow
     paths-ignore:
       - 'src/routes/api/**'
+      - 'README.md'
   workflow_dispatch:
 
 jobs:
